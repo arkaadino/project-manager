@@ -4,7 +4,7 @@ import { Users, CheckCircle, Clock } from 'lucide-react';
 import Dither
  from '../reactbits/Dither/Dither';
 const Hero = () => (
-  <section className="relative pt-24 pb-16 bg-gray-900 overflow-hidden">
+  <section className="relative min-h-screen flex items-center bg-gray-900 overflow-hidden">
     <div className="absolute inset-0 z-0">
       <Dither
         waveColor={[0, 0.5, 1]}
