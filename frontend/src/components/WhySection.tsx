@@ -25,7 +25,7 @@ const WhySection = () => (
           <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
             <MessageSquare className="text-blue-400" size={32} />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Undocumented Workflow</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">Often Miscommunications</h3>
           <p className="text-gray-400">Teams and clients use different platforms, causing miscommunication.</p>
         </div>
         
@@ -33,7 +33,7 @@ const WhySection = () => (
           <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
             <BarChart3 className="text-blue-400" size={32} />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Clients Struggle to Access Deliverables</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">Undocumented Workflow</h3>
           <p className="text-gray-400">Project progress is hard to track and tasks are poorly distributed.</p>
         </div>
         
@@ -41,7 +41,7 @@ const WhySection = () => (
           <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
             <Users className="text-blue-400" size={32} />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Klien Sulit Akses Hasil</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">Clients Struggle to Access Deliverables</h3>
           <p className="text-gray-400">There is no centralized portal to upload and preview project files.</p>
         </div>
       </div>
