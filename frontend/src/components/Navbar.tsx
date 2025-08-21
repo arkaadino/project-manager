@@ -25,7 +25,6 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => (
           <div className="ml-10 flex items-baseline space-x-8">
             <a href="#why" className="text-gray-300 hover:text-blue-400 transition-colors">Why</a>
             <a href="#features" className="text-gray-300 hover:text-blue-400 transition-colors">Features</a>
-            <a href="#pricing" className="text-gray-300 hover:text-blue-400 transition-colors">Pricing</a>
             <a href="#get-started" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
               Get Started
             </a>
@@ -44,7 +43,6 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => (
           <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-900 border-t border-gray-800">
             <a href="#why" className="block px-3 py-2 text-gray-300 hover:text-blue-400">Why</a>
             <a href="#features" className="block px-3 py-2 text-gray-300 hover:text-blue-400">Features</a>
-            <a href="#pricing" className="block px-3 py-2 text-gray-300 hover:text-blue-400">Pricing</a>
             <a href="#get-started" className="block px-3 py-2 bg-blue-600 text-white rounded-lg mt-2">Get Started</a>
           </div>
         </div>
