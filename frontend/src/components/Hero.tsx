@@ -1,30 +1,21 @@
 // components/Hero.jsx
 import React from 'react';
 import { Users, CheckCircle, Clock } from 'lucide-react';
-import FaultyTerminal from '../reactbits/FaultyTerminal/FaultyTerminal';
-
+import Dither
+ from '../reactbits/Dither/Dither';
 const Hero = () => (
   <section className="relative pt-24 pb-16 bg-gray-900 overflow-hidden">
     <div className="absolute inset-0 z-0">
-        <FaultyTerminal
-          scale={2.8}
-          gridMul={[2, 1]}
-          digitSize={1.2}
-          timeScale={1}
-          pause={false}
-          scanlineIntensity={1}
-          glitchAmount={1}
-          flickerAmount={1}
-          noiseAmp={1}
-          chromaticAberration={0}
-          dither={0}
-          curvature={0}
-          tint="#2596be"
-          mouseReact={true}
-          mouseStrength={0.5}
-          pageLoadAnimation={false}
-          brightness={1}
-        />   
+      <Dither
+        waveColor={[0, 0.5, 1]}
+        disableAnimation={false}
+        enableMouseInteraction={false}
+        mouseRadius={0.3}
+        colorNum={4}
+        waveAmplitude={0.3}
+        waveFrequency={3}
+        waveSpeed={0.05}
+      />
     </div>
 
     <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/60 to-blue-900/20 z-5"></div>
