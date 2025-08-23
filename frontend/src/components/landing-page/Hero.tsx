@@ -2,7 +2,7 @@
 import React from 'react';
 import { Users, CheckCircle, Clock } from 'lucide-react';
 import Dither
- from '../reactbits/Dither/Dither';
+ from '../../reactbits/Dither/Dither';
 const Hero = () => (
   <section className="relative min-h-screen flex items-center bg-gray-900 overflow-hidden">
     <div className="absolute inset-0 z-0">
