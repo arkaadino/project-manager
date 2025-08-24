@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
-import { Clock, CheckCircle, AlertCircle, Activity } from 'lucide-react';
+import { CheckCircle, AlertCircle, Clock, Activity } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface ActivityItem {
   action: string;
   project: string;
   time: string;
-  type: 'success' | 'warning' | 'info' | string;
+  type: 'success' | 'warning' | 'info' | 'default';
 }
 
 interface ActivityFeedProps {
   activities: ActivityItem[];
+  className?: string;
 }
 
-
-const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
-  const getActivityIcon = (type: 'success' | 'warning' | 'info' | string) => {
+export const ActivityFeed = ({ activities, className = "" }: ActivityFeedProps) => {
+  const getActivityIcon = (type: string) => {
     switch (type) {
       case 'success': return <CheckCircle size={16} className="text-green-400" />;
       case 'warning': return <AlertCircle size={16} className="text-yellow-400" />;
@@ -24,14 +25,18 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
   };
 
   return (
-    <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-white">Recent Activity</h2>
-        <button className="text-blue-400 text-sm hover:text-blue-300">View All</button>
-      </div>
+    <Card className={`bg-slate-800/30 backdrop-blur-sm border-slate-700/50 ${className}`}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-semibold text-white">Recent Activity</CardTitle>
+          <Button variant="link" className="text-blue-400 hover:text-blue-300 p-0 h-auto">
+            View All
+          </Button>
+        </div>
+      </CardHeader>
       
-      <div className="space-y-4">
-        {activities.map((activity: ActivityItem, index: number) => (
+      <CardContent className="space-y-4">
+        {activities.map((activity, index) => (
           <div key={index} className="flex items-start gap-3 p-3 bg-slate-900/30 rounded-lg">
             <div className="mt-1">
               {getActivityIcon(activity.type)}
@@ -43,9 +48,7 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities }) => {
             <span className="text-xs text-slate-500">{activity.time}</span>
           </div>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
-
-export default ActivityFeed;
