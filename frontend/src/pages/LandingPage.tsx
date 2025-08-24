@@ -6,7 +6,7 @@ import Features from '../components/landing-page/Features';
 import Footer from '../components/landing-page/Footer';
 import CTA from '../components/landing-page/CTA';
 
-const BrieflyLanding = () => {
+const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -23,4 +23,4 @@ const BrieflyLanding = () => {
   );
 };
 
-export default BrieflyLanding;
+export default LandingPage;

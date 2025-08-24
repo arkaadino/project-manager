@@ -1,21 +1,18 @@
 // components/Hero.jsx
 import React from 'react';
 import { Users, CheckCircle, Clock } from 'lucide-react';
-import Dither
- from '../../reactbits/Dither/Dither';
+import LetterGlitch from '../../reactbits/LetterGlitch/LetterGlitch';
+
 const Hero = () => (
   <section className="relative min-h-screen flex items-center bg-gray-900 overflow-hidden">
     <div className="absolute inset-0 z-0">
-      <Dither
-        waveColor={[0, 0.5, 1]}
-        disableAnimation={false}
-        enableMouseInteraction={false}
-        mouseRadius={0.3}
-        colorNum={4}
-        waveAmplitude={0.3}
-        waveFrequency={3}
-        waveSpeed={0.05}
-      />
+      <LetterGlitch
+        glitchColors={['#305491', '#a33333', '#338ea3']}
+        glitchSpeed={50}
+        centerVignette={false}
+        outerVignette={true}
+        smooth={true}
+      />    
     </div>
 
     <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/60 to-blue-900/20 z-5"></div>
