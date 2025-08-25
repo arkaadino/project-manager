@@ -1,0 +1,357 @@
+Group chat tim → otomatis ada 1 chat per project (conversations.type = 'project_channel', project_id diisi). Peserta = semua project_members.
+
+Client chat → khusus 1-on-1 dengan admin (conversations.type = 'direct'), tanpa masuk ke group tim.
+
+Messages tetap disimpan di MySQL, dengan filter by conversation_id.
+
+Keuntungan → chat internal & eksternal terpisah, query ringan (pakai index + limit), dan fleksibel kalau mau tambah fitur (DM antar tim, task thread, dll).
+
+1. Users & Companies
+sqlcompanies
+├── id (PRIMARY, UUID)
+├── name (VARCHAR(255))
+├── logo_url (TEXT)
+├── address (TEXT)
+├── phone (VARCHAR(20))
+├── email (VARCHAR(255))
+├── website (VARCHAR(255))
+├── created_at, updated_at
+
+users
+├── id (PRIMARY, UUID)
+├── email (VARCHAR(255), UNIQUE)
+├── password (VARCHAR(255), hashed)
+├── name (VARCHAR(255))
+├── avatar_url (TEXT)
+├── role (ENUM: admin, project_manager, designer, developer, client)
+├── company_id (foreign key)
+├── phone (VARCHAR(20))
+├── bio (TEXT)
+├── timezone (VARCHAR(50))
+├── is_active (BOOLEAN, default true)
+├── last_login_at (TIMESTAMP)
+├── email_verified_at (TIMESTAMP)
+├── created_at, updated_at2. Projects Management
+sqlprojects
+├── id (PRIMARY, UUID)
+├── name (VARCHAR(255))
+├── description (TEXT)
+├── client_id (foreign key to users)
+├── project_manager_id (foreign key to users)
+├── company_id (foreign key)
+├── status (ENUM: draft, active, on_hold, review, completed, cancelled)
+├── priority (ENUM: low, medium, high, urgent)
+├── budget (DECIMAL(12,2))
+├── currency (VARCHAR(3), default 'USD')
+├── start_date (DATE)
+├── end_date (DATE)
+├── progress (INT, 0-100)
+├── cover_image_url (TEXT)
+├── tags (JSON)
+├── metadata (JSON)
+├── created_at, updated_at
+
+project_members
+├── project_id (foreign key)
+├── user_id (foreign key)
+├── role (ENUM: manager, designer, developer, client, viewer)
+├── permissions (JSON)
+├── hourly_rate (DECIMAL(8,2))
+├── added_by (foreign key to users)
+├── added_at (TIMESTAMP)3. Tasks & Deliverables
+sqltask_categories
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── name (VARCHAR(255))
+├── color (VARCHAR(7))
+├── created_at, updated_at
+
+tasks
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── category_id (foreign key, nullable)
+├── name (VARCHAR(255))
+├── description (TEXT)
+├── assignee_id (foreign key to users)
+├── created_by (foreign key to users)
+├── status (ENUM: todo, in_progress, review, revision, completed, cancelled)
+├── priority (ENUM: low, medium, high, urgent)
+├── estimated_hours (DECIMAL(5,2))
+├── actual_hours (DECIMAL(5,2))
+├── due_date (DATETIME)
+├── start_date (DATETIME)
+├── completed_at (DATETIME)
+├── tags (JSON)
+├── checklist (JSON)
+├── progress (INT, 0-100)
+├── created_at, updated_at
+
+task_dependencies
+├── id (PRIMARY, UUID)
+├── task_id (foreign key)
+├── depends_on_task_id (foreign key)
+├── dependency_type (ENUM: finish_to_start, start_to_start, finish_to_finish, start_to_finish)
+├── created_at
+
+task_watchers
+├── task_id (foreign key)
+├── user_id (foreign key)
+├── added_at (TIMESTAMP)4. Files & Assets Management
+sqlfolders
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── parent_folder_id (foreign key, nullable)
+├── name (VARCHAR(255))
+├── created_by (foreign key to users)
+├── created_at, updated_at
+
+files
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── task_id (foreign key, nullable)
+├── folder_id (foreign key, nullable)
+├── uploaded_by (foreign key to users)
+├── filename (VARCHAR(255))
+├── original_name (VARCHAR(255))
+├── file_path (TEXT)
+├── file_size (BIGINT)
+├── mime_type (VARCHAR(100))
+├── file_type (ENUM: image, document, video, audio, archive, other)
+├── version (INT, default 1)
+├── parent_file_id (foreign key, nullable)
+├── is_latest (BOOLEAN, default true)
+├── download_count (INT, default 0)
+├── metadata (JSON)
+├── thumbnail_url (TEXT)
+├── created_at, updated_at
+
+file_shares
+├── id (PRIMARY, UUID)
+├── file_id (foreign key)
+├── shared_by (foreign key to users)
+├── shared_with (foreign key to users, nullable)
+├── share_token (VARCHAR(255), UNIQUE)
+├── permissions (JSON)
+├── expires_at (DATETIME, nullable)
+├── download_count (INT, default 0)
+├── created_at5. Messages & Communication
+sqlconversations
+├── id (PRIMARY, UUID)
+├── type (ENUM: project_channel, direct, task_thread, group)
+├── project_id (foreign key, nullable)
+├── task_id (foreign key, nullable)
+├── name (VARCHAR(255))
+├── description (TEXT)
+├── avatar_url (TEXT)
+├── created_by (foreign key to users)
+├── last_message_id (foreign key, nullable)
+├── last_message_at (TIMESTAMP)
+├── is_archived (BOOLEAN, default false)
+├── settings (JSON)
+├── created_at, updated_at
+
+conversation_participants
+├── id (PRIMARY, UUID)
+├── conversation_id (foreign key)
+├── user_id (foreign key)
+├── role (ENUM: admin, member, readonly)
+├── joined_at (TIMESTAMP)
+├── last_read_at (TIMESTAMP)
+├── last_read_message_id (foreign key, nullable)
+├── notification_settings (JSON)
+├── is_muted (BOOLEAN, default false)
+
+messages
+├── id (PRIMARY, UUID)
+├── conversation_id (foreign key)
+├── sender_id (foreign key to users)
+├── content (TEXT)
+├── message_type (ENUM: text, file, system, reaction)
+├── attachments (JSON)
+├── mentions (JSON)
+├── reactions (JSON)
+├── parent_message_id (foreign key, nullable)
+├── thread_count (INT, default 0)
+├── is_edited (BOOLEAN, default false)
+├── edited_at (TIMESTAMP, nullable)
+├── is_deleted (BOOLEAN, default false)
+├── deleted_at (TIMESTAMP, nullable)
+├── metadata (JSON)
+├── created_at, updated_at
+
+message_reads
+├── id (PRIMARY, UUID)
+├── message_id (foreign key)
+├── user_id (foreign key)
+├── read_at (TIMESTAMP)6. Comments & Reviews
+sqlcomments
+├── id (PRIMARY, UUID)
+├── commentable_type (ENUM: project, task, file, message)
+├── commentable_id (UUID)
+├── user_id (foreign key)
+├── content (TEXT)
+├── parent_comment_id (foreign key, nullable)
+├── attachments (JSON)
+├── mentions (JSON)
+├── reactions (JSON)
+├── is_resolved (BOOLEAN, default false)
+├── resolved_by (foreign key to users, nullable)
+├── resolved_at (TIMESTAMP, nullable)
+├── is_edited (BOOLEAN, default false)
+├── edited_at (TIMESTAMP, nullable)
+├── created_at, updated_at
+
+revisions
+├── id (PRIMARY, UUID)
+├── file_id (foreign key)
+├── task_id (foreign key, nullable)
+├── requested_by (foreign key to users)
+├── assigned_to (foreign key to users, nullable)
+├── title (VARCHAR(255))
+├── description (TEXT)
+├── status (ENUM: pending, in_progress, completed, rejected, cancelled)
+├── priority (ENUM: low, medium, high, urgent)
+├── due_date (DATETIME)
+├── completed_at (DATETIME, nullable)
+├── rejection_reason (TEXT, nullable)
+├── attachments (JSON)
+├── created_at, updated_at7. Calendar & Events
+sqlevents
+├── id (PRIMARY, UUID)
+├── project_id (foreign key, nullable)
+├── task_id (foreign key, nullable)
+├── created_by (foreign key to users)
+├── title (VARCHAR(255))
+├── description (TEXT)
+├── location (VARCHAR(255))
+├── event_type (ENUM: meeting, deadline, milestone, review, call, presentation)
+├── start_datetime (DATETIME)
+├── end_datetime (DATETIME)
+├── is_all_day (BOOLEAN, default false)
+├── timezone (VARCHAR(50))
+├── recurrence_rule (TEXT, nullable)
+├── recurrence_end_date (DATE, nullable)
+├── reminder_settings (JSON)
+├── meeting_url (TEXT, nullable)
+├── status (ENUM: scheduled, in_progress, completed, cancelled)
+├── created_at, updated_at
+
+event_attendees
+├── id (PRIMARY, UUID)
+├── event_id (foreign key)
+├── user_id (foreign key)
+├── status (ENUM: invited, accepted, declined, maybe, no_response)
+├── response_at (TIMESTAMP, nullable)
+├── notes (TEXT, nullable)
+├── invited_by (foreign key to users)
+├── invited_at (TIMESTAMP)8. Activity Tracking
+sqlactivities
+├── id (PRIMARY, UUID)
+├── user_id (foreign key, who performed action)
+├── project_id (foreign key, nullable)
+├── task_id (foreign key, nullable)
+├── action_type (VARCHAR(50))
+├── entity_type (VARCHAR(50))
+├── entity_id (UUID)
+├── old_values (JSON, nullable)
+├── new_values (JSON, nullable)
+├── description (TEXT)
+├── ip_address (VARCHAR(45))
+├── user_agent (TEXT)
+├── metadata (JSON)
+├── created_at
+
+activity_feeds
+├── id (PRIMARY, UUID)
+├── user_id (foreign key, who sees the feed)
+├── activity_id (foreign key)
+├── is_read (BOOLEAN, default false)
+├── created_at9. Notifications System
+sqlnotifications
+├── id (PRIMARY, UUID)
+├── user_id (foreign key, recipient)
+├── sender_id (foreign key to users, nullable)
+├── type (VARCHAR(50))
+├── title (VARCHAR(255))
+├── message (TEXT)
+├── action_url (TEXT, nullable)
+├── entity_type (VARCHAR(50), nullable)
+├── entity_id (UUID, nullable)
+├── channels (JSON, email/push/in_app)
+├── is_read (BOOLEAN, default false)
+├── read_at (TIMESTAMP, nullable)
+├── sent_at (TIMESTAMP, nullable)
+├── metadata (JSON)
+├── created_at, updated_at
+
+notification_preferences
+├── id (PRIMARY, UUID)
+├── user_id (foreign key)
+├── type (VARCHAR(50))
+├── channels (JSON)
+├── is_enabled (BOOLEAN, default true)
+├── created_at, updated_at10. Time Tracking & Billing
+sqltime_logs
+├── id (PRIMARY, UUID)
+├── user_id (foreign key)
+├── project_id (foreign key)
+├── task_id (foreign key, nullable)
+├── description (TEXT)
+├── hours_worked (DECIMAL(5,2))
+├── hourly_rate (DECIMAL(8,2))
+├── billable (BOOLEAN, default true)
+├── log_date (DATE)
+├── start_time (TIME, nullable)
+├── end_time (TIME, nullable)
+├── is_approved (BOOLEAN, default false)
+├── approved_by (foreign key to users, nullable)
+├── approved_at (TIMESTAMP, nullable)
+├── invoice_id (foreign key, nullable)
+├── created_at, updated_at
+
+invoices
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── client_id (foreign key to users)
+├── invoice_number (VARCHAR(50), UNIQUE)
+├── title (VARCHAR(255))
+├── description (TEXT)
+├── subtotal (DECIMAL(12,2))
+├── tax_rate (DECIMAL(5,2), default 0)
+├── tax_amount (DECIMAL(12,2))
+├── total_amount (DECIMAL(12,2))
+├── currency (VARCHAR(3))
+├── status (ENUM: draft, sent, paid, overdue, cancelled)
+├── issue_date (DATE)
+├── due_date (DATE)
+├── paid_at (TIMESTAMP, nullable)
+├── notes (TEXT)
+├── created_at, updated_at11. Portfolio & Showcase
+sqlproject_portfolio
+├── id (PRIMARY, UUID)
+├── project_id (foreign key)
+├── title (VARCHAR(255))
+├── description (TEXT)
+├── cover_image_id (foreign key to files)
+├── gallery_images (JSON)
+├── tags (JSON)
+├── client_testimonial (TEXT)
+├── results_achieved (TEXT)
+├── technologies_used (JSON)
+├── project_url (TEXT, nullable)
+├── is_featured (BOOLEAN, default false)
+├── is_public (BOOLEAN, default false)
+├── display_order (INT)
+├── created_at, updated_at
+
+portfolio_categories
+├── id (PRIMARY, UUID)
+├── name (VARCHAR(255))
+├── slug (VARCHAR(255), UNIQUE)
+├── description (TEXT)
+├── color (VARCHAR(7))
+├── created_at, updated_at
+
+portfolio_category_assignments
+├── portfolio_id (foreign key)
+├── category_id (foreign key)

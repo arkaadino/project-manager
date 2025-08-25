@@ -1,0 +1,62 @@
+1. Projects Page
+Main Components:
+
+ProjectsList - Grid/list view proyek
+ProjectCard - Card individual proyek
+ProjectFilters - Filter by status, client, date
+CreateProjectDialog - Modal buat proyek baru
+CommentProject
+
+Sub Components bisa dipecah:
+
+ProjectCard → ProjectStatus, ProjectProgress, ProjectActions
+CreateProjectDialog → BasicInfoForm, ClientSelector, TeamSelector
+ProjectFilters → StatusFilter, ClientFilter, DateRangeFilter
+
+Shadcn Components:
+
+Card, Badge, Progress, Dialog, Select, Input, Button, Tabs
+
+2. Calendar Page
+Main Components:
+
+CalendarView - Main calendar display
+EventDialog - Create/edit events
+CalendarSidebar - Mini calendar + filters
+EventList - Upcoming events
+
+Sub Components bisa dipecah:
+
+CalendarView → MonthView, WeekView, DayView
+EventDialog → EventForm, DateTimePicker, AttendeeSelector
+CalendarSidebar → MiniCalendar, EventFilters, LegendColors
+
+Shadcn Components:
+
+Calendar, Dialog, Select, Input, Badge, Tabs
+
+
+3. Activity Page
+Main Components:
+
+ActivityFeed - Timeline aktivitas
+ActivityFilters - Filter aktivitas
+ActivityItem - Individual activity
+ActivityStats - Quick stats
+
+Sub Components bisa dipecah:
+
+ActivityFeed → ActivityTimeline, LoadMoreButton
+ActivityItem → ActivityIcon, ActivityContent, ActivityMeta
+ActivityFilters → UserFilter, ProjectFilter, ActionTypeFilter, DateFilter
+
+Shadcn Components:
+
+Card, Avatar, Badge, Select, ScrollArea, Separator
+
+Library Tambahan yang Dibutuhkan:
+
+Calendar: react-big-calendar
+File Upload: react-dropzone
+Date handling: date-fns
+Real-time (optional): Socket.io client
