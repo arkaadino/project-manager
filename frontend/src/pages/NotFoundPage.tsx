@@ -1,14 +1,14 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
     <div className="h-screen bg-gray-800 flex flex-col items-center justify-center text-center">
-      <h1 className="text-6xl text-white font-bold mb-4">OOPS!</h1>
+      <h1 className="text-6xl text-white font-bold mb-4">404</h1>
       <span className="text-2xl text-gray-300 mb-6">
-        You are reaching the Void..
+        There's nothing here..
       </span>
 
       <div className="flex gap-4">        {/* Button Go Back */}

@@ -23,7 +23,7 @@ export interface ActivityItem {
   time: string;
   type: 'success' | 'warning' | 'info' | 'default';
   userId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, number>;
 }
 
 // Stats Types

@@ -2,10 +2,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Home,
   FolderOpen,
-  MessageCircle,
   Calendar,
   Activity,
-  Settings,
   LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,12 +17,10 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
   const location = useLocation();
 
   const navItems = [
-    { icon: Home, label: 'Dashboard', path: '/dashboard' },
+    { icon: Home, label: 'Dashboard', path: '/' },
     { icon: FolderOpen, label: 'Projects', path: '/projects' },
-    { icon: MessageCircle, label: 'Messages', path: '/messages' },
     { icon: Calendar, label: 'Calendar', path: '/calendar' },
     { icon: Activity, label: 'Activity', path: '/activity' },
-    { icon: Settings, label: 'Settings', path: '/settings' }
   ];
 
   const handleNavigation = (path: string) => {
@@ -43,16 +39,9 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
   return (
     <div className={`fixed left-0 top-0 h-full w-64 bg-slate-900/90 backdrop-blur-sm border-r border-slate-700/50 ${className}`}>
       <div className="p-6">
-        <div 
-          className="flex items-center gap-3 mb-8 cursor-pointer hover:opacity-80 transition-opacity" 
-          onClick={() => navigate('/dashboard')}
-        >
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">b</span>
-          </div>
-          <span className="text-white font-semibold text-xl">Briefly</span>
+        <div className="flex justify-center items-center w-full">
+        <img src="/Briefly-ext.svg" alt="Logo" className="w-40 h-40" />
         </div>
-
         <nav className="space-y-2">
           {navItems.map((item) => (
             <Button

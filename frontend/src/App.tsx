@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import DashboardPage from "./pages/DashboardPage"
 import LandingPage from "./pages/LandingPage"
 import NotFoundPage from "./pages/NotFoundPage";
+import AuthPage from "./pages/AuthPage";
+import ProjectsPage from "./pages/ProjectsPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -23,7 +25,7 @@ function App() {
     <Router>
       <Routes>
         <Route 
-          path="/" 
+          path="/landing" 
           element={
             <PublicRoute>
               <LandingPage />
@@ -32,13 +34,32 @@ function App() {
         />
 
         <Route 
-          path="/dashboard" 
+          path="/auth" 
+          element={
+            <PublicRoute>
+              <AuthPage />
+            </PublicRoute>
+          } 
+        />
+
+        <Route 
+          path="/" 
           element={
             <PublicRoute>
               <DashboardPage />
             </PublicRoute>
           } 
         />
+
+        <Route 
+          path="/projects" 
+          element={
+            <PublicRoute>
+              <ProjectsPage />
+            </PublicRoute>
+          } 
+        />
+
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
