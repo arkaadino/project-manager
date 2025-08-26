@@ -37,7 +37,6 @@ export const ProjectFilters = ({
 }: ProjectFiltersProps) => {
   return (
     <div className="space-y-4">
-      {/* Search Bar */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
         <Input
@@ -48,65 +47,59 @@ export const ProjectFilters = ({
         />
       </div>
 
-      {/* Filter Controls */}
       <div className="flex flex-wrap items-center gap-4">
-        {/* Status Filter */}
         <Select value={statusFilter} onValueChange={onStatusFilterChange}>
           <SelectTrigger className="w-[140px] bg-slate-800/50 border-slate-700/50 text-white">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
-            <SelectItem className="text-white" value="all">All Status</SelectItem>
-            <SelectItem className="text-white" value="Planning">Planning</SelectItem>
-            <SelectItem className="text-white" value="In Progress">In Progress</SelectItem>
-            <SelectItem className="text-white" value="Review">Review</SelectItem>
-            <SelectItem className="text-white" value="Completed">Completed</SelectItem>
-            <SelectItem className="text-white" value="On Hold">On Hold</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="all">All Status</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="Planning">Planning</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="In Progress">In Progress</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="Review">Review</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="Completed">Completed</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="On Hold">On Hold</SelectItem>
           </SelectContent>
         </Select>
 
-        {/* Client Filter */}
         <Select value={clientFilter} onValueChange={onClientFilterChange}>
           <SelectTrigger className="w-[140px] bg-slate-800/50 border-slate-700/50 text-white">
             <SelectValue placeholder="Client" />
           </SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
-            <SelectItem className="text-white" value="all">All Clients</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="all">All Clients</SelectItem>
             {clients.map(client => (
-              <SelectItem className="text-white" key={client} value={client}>{client}</SelectItem>
+              <SelectItem className="text-white focus:bg-blue-600 focus:text-white" key={client} value={client}>{client}</SelectItem>
             ))}
           </SelectContent>
         </Select>
 
-        {/* Priority Filter */}
         <Select value={priorityFilter} onValueChange={onPriorityFilterChange}>
           <SelectTrigger className="w-[120px] bg-slate-800/50 border-slate-700/50 text-white">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
-            <SelectItem className="text-white" value="all">All Priority</SelectItem>
-            <SelectItem className="text-white" value="High">High</SelectItem>
-            <SelectItem className="text-white" value="Medium">Medium</SelectItem>
-            <SelectItem className="text-white" value="Low">Low</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="all">All Priority</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="High">High</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="Medium">Medium</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="Low">Low</SelectItem>
           </SelectContent>
         </Select>
 
-        {/* Sort By */}
         <Select value={sortBy} onValueChange={onSortChange}>
           <SelectTrigger className="w-[140px] bg-slate-800/50 border-slate-700/50 text-white">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent className="bg-slate-800 border-slate-700">
-            <SelectItem className="text-white" value="name">Name</SelectItem>
-            <SelectItem className="text-white" value="deadline">Deadline</SelectItem>
-            <SelectItem className="text-white" value="progress">Progress</SelectItem>
-            <SelectItem className="text-white" value="priority">Priority</SelectItem>
-            <SelectItem className="text-white" value="status">Status</SelectItem>
-            <SelectItem className="text-white" value="created">Created Date</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="name">Name</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="deadline">Deadline</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="progress">Progress</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="priority">Priority</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="status">Status</SelectItem>
+            <SelectItem className="text-white focus:bg-blue-600 focus:text-white" value="created">Created Date</SelectItem>
           </SelectContent>
         </Select>
 
-        {/* Clear Filters */}
         {activeFiltersCount > 0 && (
           <div className="flex items-center gap-2">
             <Button
@@ -125,7 +118,6 @@ export const ProjectFilters = ({
         )}
       </div>
 
-      {/* Active Filter Tags */}
       <div className="flex flex-wrap gap-2">
         {statusFilter !== 'all' && (
           <Badge variant="outline" className="bg-slate-800/50 text-slate-300 border-slate-600">

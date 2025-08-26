@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Home,
   FolderOpen,
-  Calendar,
+  User,
   Activity,
   LogOut
 } from 'lucide-react';
@@ -19,7 +19,7 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
   const navItems = [
     { icon: Home, label: 'Dashboard', path: '/' },
     { icon: FolderOpen, label: 'Projects', path: '/projects' },
-    { icon: Calendar, label: 'Calendar', path: '/calendar' },
+    { icon: User, label: 'User', path: '/user' },
     { icon: Activity, label: 'Activity', path: '/activity' },
   ];
 
@@ -51,7 +51,7 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
               onClick={() => handleNavigation(item.path)}
               className={`w-full justify-start gap-3 h-11 ${
                 isActive(item.path)
-                  ? 'bg-blue-500/20 text-blue-400 border-l-2 border-blue-500 rounded-l-none hover:bg-blue-500/30' 
+                  ? 'bg-blue-500/20 text-blue-400 border-l-2 border-blue-500 rounded-l-none hover:bg-blue-500/30 hover:text-white' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >

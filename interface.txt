@@ -1,0 +1,404 @@
+//COMPONENT
+
+//ActivityFeed - Dashboard 
+
+interface ActivityItem {
+  action: string;
+  project: string;
+  time: string;
+  type: 'success' | 'warning' | 'info' | 'default';
+}
+
+interface ActivityFeedProps {
+  activities: ActivityItem[];
+  className?: string;
+}
+
+
+//Header - Dashboard
+interface HeaderProps {
+  title?: string;
+  description?: string;
+  className?: string;
+}
+
+//ProjectCard - Dashboard
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: string;
+  progress: number;
+  deadline: string;
+  team: string[];
+  priority: string;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  className?: string;
+}
+
+//QuickActions - Dashboard
+interface QuickAction {
+  icon: LucideIcon;
+  label: string;
+  color: string;
+  onClick?: () => void;
+}
+
+interface QuickActionsProps {
+  className?: string;
+  onActionClick?: (action: string) => void;
+}
+
+//Sidebar - Dashboard
+interface SidebarProps {
+  className?: string;
+}
+
+//StatsCard - Dashboard
+interface StatsCardProps {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  change: string;
+  color: string;
+  className?: string;
+}
+
+
+//ActivityStats - Activity Page
+interface ActivityStatsProps {
+  stats: {
+    totalTasks: number;
+    completedToday: number;
+    activeProjects: number;
+    teamMembers: number;
+  };
+}
+
+
+//MiniKanban - Activity Page
+interface Task {
+  id: string;
+  projectId: number;
+  title: string;
+  description: string;
+  assignedTo: string[];
+  status: 'todo' | 'in_progress' | 'review' | 'completed';
+  progress: number;
+  dueDate: string;
+  priority: 'low' | 'medium' | 'high';
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface MiniKanbanProps {
+  tasks: Task[];
+  currentUser: {
+    id: string;
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  projects: Array<{
+    id: number;
+    name: string;
+    client: string;
+  }>;
+  onTaskStatusChange: (taskId: string, newStatus: Task['status']) => void;
+}
+
+
+//ProjectActivity - Activity Page
+interface Activity {
+  id: string;
+  projectId: number;
+  taskId?: string;
+  type: 'task_created' | 'task_completed' | 'task_assigned' | 'status_changed' | 'comment_added' | 'login' | 'file_uploaded';
+  title: string;
+  description: string;
+  user: {
+    id: string;
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  timestamp: string;
+  metadata?: {
+    oldValue?: string;
+    newValue?: string;
+    fileName?: string;
+  };
+}
+
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: 'Planning' | 'In Progress' | 'Review' | 'Completed';
+  totalTasks: number;
+  completedTasks: number;
+  inProgressTasks: number;
+  team: Array<{ id: string; name: string; avatar: string; role: string; }>;
+  recentActivities: Activity[];
+  progress: number;
+}
+
+interface ProjectActivityCardsProps {
+  projects: Project[];
+  currentUser: {
+    id: string;
+    name: string;
+    avatar: string;
+    role: string;
+  };
+}
+
+//CommentProject - Project Page
+interface Comment {
+  id: number;
+  projectId: number;
+  author: { 
+    id: string;
+    name: string; 
+    avatar: string; 
+    role: string;
+  };
+  content: string;
+  timestamp: string;
+  attachments?: Array<{ 
+    id: string;
+    name: string; 
+    size: string; 
+    type: 'image' | 'file';
+    url: string;
+  }>;
+  isEdited?: boolean;
+}
+
+interface CommentProjectProps {
+  projectId: number;
+  projectName: string;
+  comments: Comment[];
+  currentUser: {
+    id: string;
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  onAddComment: (projectId: number, content: string, attachments?: File[]) => void;
+  onEditComment: (commentId: number, content: string) => void;
+  onDeleteComment: (commentId: number) => void;
+}
+
+//CreateProjectDialog - Project Page
+interface TeamMember {
+  id: string;
+  name: string;
+  avatar: string;
+  role: string;
+  email: string;
+}
+
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+}
+
+interface NewProject {
+  id: number;
+  name: string;
+  description: string;
+  client: string;
+  status: 'Planning' | 'In Progress' | 'Review' | 'On Hold' | 'Completed';
+  progress: number;
+  deadline: string;
+  team: Array<{ id: string; name: string; avatar: string; }>;
+  priority: 'High' | 'Medium' | 'Low';
+  budget: number;
+  commentsCount: number;
+  filesCount: number;
+  createdAt: string;
+  tags: string[];
+  requirements: string;
+  deliverables: string;
+}
+
+interface CreateProjectDialogProps {
+  onCreateProject: (project: NewProject) => void;
+  clients: Client[];
+  teamMembers: TeamMember[];
+  trigger?: React.ReactNode;
+}
+
+
+//ProjectFilters - Project Page
+interface ProjectFiltersProps {
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
+  clientFilter: string;
+  onClientFilterChange: (value: string) => void;
+  priorityFilter: string;
+  onPriorityFilterChange: (value: string) => void;
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  onClearFilters: () => void;
+  clients: string[];
+  activeFiltersCount: number;
+}
+
+
+//ProjectCards - Project Page
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: 'Planning' | 'In Progress' | 'Review' | 'Completed' | 'On Hold';
+  progress: number;
+  deadline: string;
+  team: Array<{ id: string; name: string; avatar: string; }>;
+  priority: 'Low' | 'Medium' | 'High';
+  description: string;
+  budget: number;
+  commentsCount: number;
+  filesCount: number;
+  createdAt: string;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  onViewComments: (projectId: number) => void;
+  onEdit: (projectId: number) => void;
+  onDelete: (projectId: number) => void;
+}
+
+
+//MAIN PAGE
+
+//Activity Page
+interface Task {
+  id: string;
+  projectId: number;
+  title: string;
+  description: string;
+  assignedTo: string[];
+  status: 'todo' | 'in_progress' | 'review' | 'completed';
+  progress: number;
+  dueDate: string;
+  priority: 'low' | 'medium' | 'high';
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Activity {
+  id: string;
+  projectId: number;
+  taskId?: string;
+  type: 'task_created' | 'task_completed' | 'task_assigned' | 'status_changed' | 'comment_added' | 'login' | 'file_uploaded';
+  title: string;
+  description: string;
+  user: {
+    id: string;
+    name: string;
+    avatar: string;
+    role: string;
+  };
+  timestamp: string;
+  metadata?: {
+    oldValue?: string;
+    newValue?: string;
+    fileName?: string;
+  };
+}
+
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: 'Planning' | 'In Progress' | 'Review' | 'Completed';
+  totalTasks: number;
+  completedTasks: number;
+  inProgressTasks: number;
+  team: Array<{ id: string; name: string; avatar: string; role: string; }>;
+  recentActivities: Activity[];
+  progress: number;
+}
+
+//Dashboard Page
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: string;
+  progress: number;
+  deadline: string;
+  team: string[];
+  priority: string;
+}
+
+interface ActivityItem {
+  action: string;
+  project: string;
+  time: string;
+  type: 'success' | 'warning' | 'info' | 'default';
+}
+
+
+//Project Page
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  status: 'Planning' | 'In Progress' | 'Review' | 'Completed' | 'On Hold';
+  progress: number;
+  deadline: string;
+  team: Array<{ id: string; name: string; avatar: string; }>;
+  priority: 'Low' | 'Medium' | 'High';
+  description: string;
+  budget: number;
+  commentsCount: number;
+  filesCount: number;
+  createdAt: string;
+}
+
+interface Comment {
+  id: number;
+  projectId: number;
+  author: { 
+    id: string;
+    name: string; 
+    avatar: string; 
+    role: string;
+  };
+  content: string;
+  timestamp: string;
+  attachments?: Array<{ 
+    id: string;
+    name: string; 
+    size: string; 
+    type: 'image' | 'file';
+    url: string;
+  }>;
+  isEdited?: boolean;
+}
+
+interface TeamMember {
+  id: string;
+  name: string;
+  avatar: string;
+  role: string;
+  email: string;
+}
+
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  company: string;
+}

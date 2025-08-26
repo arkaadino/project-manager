@@ -4,19 +4,20 @@ import LandingPage from "./pages/LandingPage"
 import NotFoundPage from "./pages/NotFoundPage";
 import AuthPage from "./pages/AuthPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import ActivityPage from "./pages/ActivityPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return isAuthenticated ? children : <Navigate to="/landing" replace />;
 };
 
 // Public Route Component (redirect to dashboard if already logged in)
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   
-  return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
+  return !isAuthenticated ? children : <Navigate to="/" replace />;
 };
 
 
@@ -59,6 +60,16 @@ function App() {
             </PublicRoute>
           } 
         />
+
+        <Route 
+          path="/activity" 
+          element={
+            <PublicRoute>
+              <ActivityPage />
+            </PublicRoute>
+          } 
+        />
+
 
 
         <Route path="*" element={<NotFoundPage />} />

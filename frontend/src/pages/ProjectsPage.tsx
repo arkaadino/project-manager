@@ -2,18 +2,15 @@ import { useState } from 'react';
 import { Plus, Grid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 
-// Layout components
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
 
-// Import our custom components
 import { ProjectCard } from '@/components/projects-page/projectscard';
 import { ProjectFilters } from '@/components/projects-page/projectfilters';
 import { CommentProject } from '@/components/projects-page/commentproject';
 import { CreateProjectDialog } from '@/components/projects-page/createprojectdialog';
-
-// Types
 interface Project {
   id: number;
   name: string;
@@ -67,7 +64,6 @@ interface Client {
 }
 
 export const ProjectsPage = () => {
-  // Mock Data
   const [projects, setProjects] = useState<Project[]>([
     {
       id: 1,
@@ -169,7 +165,6 @@ export const ProjectsPage = () => {
     role: "Senior Designer"
   };
 
-  // Filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [clientFilter, setClientFilter] = useState('all');
@@ -177,10 +172,8 @@ export const ProjectsPage = () => {
   const [sortBy, setSortBy] = useState('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Dialog states
   const [selectedProjectForComments, setSelectedProjectForComments] = useState<number | null>(null);
 
-  // Filter logic
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          project.client.toLowerCase().includes(searchTerm.toLowerCase());
@@ -191,7 +184,6 @@ export const ProjectsPage = () => {
     return matchesSearch && matchesStatus && matchesClient && matchesPriority;
   });
 
-  // Sort logic
   const sortedProjects = [...filteredProjects].sort((a, b) => {
     switch (sortBy) {
       case 'name':
@@ -213,7 +205,6 @@ export const ProjectsPage = () => {
     }
   });
 
-  // Actions
   const handleCreateProject = (newProject: Project) => {
     setProjects(prev => [newProject, ...prev]);
   };
@@ -224,12 +215,10 @@ export const ProjectsPage = () => {
 
   const handleEditProject = (projectId: number) => {
     console.log('Edit project:', projectId);
-    // Implement edit logic
   };
 
   const handleDeleteProject = (projectId: number) => {
     console.log('Delete project:', projectId);
-    // Implement delete logic
   };
 
   const handleAddComment = async (projectId: number, content: string, attachments?: File[]) => {
@@ -315,7 +304,6 @@ export const ProjectsPage = () => {
         />
         
         <div className="space-y-6">
-          {/* Header */}
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white mb-2">Projects</h1>
@@ -325,21 +313,23 @@ export const ProjectsPage = () => {
             </div>
             
             <div className="flex items-center gap-3">
-              {/* View Mode Toggle */}
-                <div className="flex items-center bg-slate-800 rounded-full p-1">
-                {['grid', 'list'].map(mode => (
-                    <button
-                    key={mode}
-                    onClick={() => setViewMode(mode as 'grid' | 'list')}
-                    className={`
-                        flex items-center justify-center w-10 h-10 rounded-full transition
-                        ${viewMode === mode ? 'bg-cyan-600 text-white' : 'text-slate-400'}
-                    `}
-                    >
-                    {mode === 'grid' ? <Grid className="w-4 h-4" /> : <List className="w-4 h-4" />}
-                    </button>
-                ))}
+              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm rounded-lg px-4 py-2 border border-slate-700">
+                <div className="flex items-center gap-2">
+                  <Grid className={`w-4 h-4 ${viewMode === 'grid' ? 'text-cyan-400' : 'text-slate-400'}`} />
+                  <span className="text-sm text-slate-300">Grid</span>
                 </div>
+                
+                <Switch 
+                  checked={viewMode === 'list'}
+                  onCheckedChange={(checked) => setViewMode(checked ? 'list' : 'grid')}
+                  className="data-[state=checked]:bg-cyan-600 data-[state=unchecked]:bg-slate-600"
+                />
+                
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-300">List</span>
+                  <List className={`w-4 h-4 ${viewMode === 'list' ? 'text-cyan-400' : 'text-slate-400'}`} />
+                </div>
+              </div>
 
               <CreateProjectDialog
                 onCreateProject={handleCreateProject}
@@ -349,7 +339,6 @@ export const ProjectsPage = () => {
             </div>
           </div>
 
-          {/* Filters */}
           <ProjectFilters
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
@@ -366,7 +355,6 @@ export const ProjectsPage = () => {
             activeFiltersCount={activeFiltersCount}
           />
 
-          {/* Projects Grid/List */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <p className="text-slate-400">
@@ -419,7 +407,6 @@ export const ProjectsPage = () => {
             )}
           </div>
 
-          {/* Comments Dialog */}
           <Dialog open={selectedProjectForComments !== null} onOpenChange={(open) => {
             if (!open) setSelectedProjectForComments(null);
           }}>
