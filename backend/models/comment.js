@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
   projectId: { type: Number, required: true },
   author: {
     id: String,

@@ -164,30 +164,30 @@ router.post('/refresh', authMiddleware, async (req, res) => {
   }
 });
 
-// Forgot password (placeholder)
-router.post('/forgot-password', [
-  body('email').isEmail().normalizeEmail()
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+// // Forgot password (placeholder)
+// router.post('/forgot-password', [
+//   body('email').isEmail().normalizeEmail()
+// ], async (req, res) => {
+//   try {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
 
-    const { email } = req.body;
-    const user = await User.findOne({ email });
+//     const { email } = req.body;
+//     const user = await User.findOne({ email });
     
-    if (!user) {
-      // Don't reveal if email exists or not
-      return res.json({ message: 'If email exists, reset instructions will be sent' });
-    }
+//     if (!user) {
+//       // Don't reveal if email exists or not
+//       return res.json({ message: 'If email exists, reset instructions will be sent' });
+//     }
 
-    // TODO: Implement email sending logic
-    // For now, just return success
-    res.json({ message: 'Reset password instructions sent to email' });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to process request' });
-  }
-});
+//     // TODO: Implement email sending logic
+//     // For now, just return success
+//     res.json({ message: 'Reset password instructions sent to email' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to process request' });
+//   }
+// });
 
 module.exports = router;

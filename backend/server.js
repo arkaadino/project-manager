@@ -1,19 +1,12 @@
 // ===== SERVER.JS (Main Entry Point) =====
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 require('dotenv').config();
 const authRoutes = require('./routes/auth');
-// const projectRoutes = require('./routes/projects');
-// const taskRoutes = require('./routes/tasks');
-// const userRoutes = require('./routes/users');
+const setupMiddleware = require('./middleware/middleware')
 
-// Import middleware
-// const { authMiddleware, requireRole } = require('./middleware/auth');
+const { authMiddleware, requireRole } = require('./middleware/auth');
 
 const app = express();
 
@@ -21,6 +14,7 @@ const app = express();
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  dbName: "project-manager"
 })
 .then(() => {
   console.log('✅ MongoDB connected successfully');
@@ -31,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URL, {
   process.exit(1);
 });
 
+setupMiddleware(app);
 // Logging middleware
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
@@ -100,7 +95,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-  console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
 });
 
 // Graceful shutdown

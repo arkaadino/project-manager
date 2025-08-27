@@ -1,4 +1,5 @@
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   isMenuOpen: boolean;
@@ -25,9 +26,9 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, toggleMenu }) => (
           <div className="ml-10 flex items-baseline space-x-8">
             <a href="#why" className="text-gray-300 hover:text-blue-400 transition-colors">Why</a>
             <a href="#features" className="text-gray-300 hover:text-blue-400 transition-colors">Features</a>
-            <a href="#get-started" className="bg-gray-900/20 text-white font-semibold px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-950/30 transition-colors">
+            <Link to="/auth" className="bg-gray-900/20 text-white font-semibold px-4 py-2 rounded-lg border border-gray-700 hover:bg-gray-950/30 transition-colors">
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
         
