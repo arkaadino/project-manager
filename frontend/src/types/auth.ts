@@ -19,6 +19,7 @@ export interface RegisterData {
   email: string;
   password: string;
   confirmPassword: string;
+  role: string;
   firstName: string;
   lastName: string;
 }

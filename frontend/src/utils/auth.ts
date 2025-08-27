@@ -51,6 +51,7 @@ export const register = async (registerData: RegisterData): Promise<AuthResponse
     password: registerData.password,
     firstName,
     lastName,
+    role: registerData.role,
   };
 
   const response = await fetch(`${API_BASE_URL}/auth/register`, {

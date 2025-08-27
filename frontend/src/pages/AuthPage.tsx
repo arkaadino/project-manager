@@ -317,10 +317,10 @@ const AuthPage = () => {
                               Client
                             </SelectItem>
                             <SelectItem value="admin" className="text-white hover:bg-gray-600">
-                              Freelancer 
+                              Admin 
                             </SelectItem>
                             <SelectItem value="team" className="text-white hover:bg-gray-600">
-                              Admin
+                              Team
                             </SelectItem>
                           </SelectContent>
                         </Select>
