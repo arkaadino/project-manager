@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
-import { logout } from '../../utils/auth';
+import { logout } from '../../utils/authApi';
 import { useAuth } from '../../hooks/useAuth';
 import { useState } from 'react';
 

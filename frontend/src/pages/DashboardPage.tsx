@@ -1,7 +1,7 @@
-// DashboardPage.tsx - Simple version tanpa custom hooks
+// DashboardPage.tsx - Fixed version
 import { useState, useEffect } from 'react';
 import { Clock, Users, CheckCircle, Folder } from 'lucide-react';
-import { dashboardApi } from '@/utils/api';
+import { dashboardApi } from '@/utils/dashboardApi';
 import type { DashboardData } from '@/types';
 
 // Import Components
@@ -24,7 +24,87 @@ export const DashboardPage = () => {
       setLoading(true);
       setError(null);
       const data = await dashboardApi.getDashboard();
-      setDashboardData(data);
+      
+      // Transform the API response to match DashboardData interface
+      const completeData: DashboardData = {
+        stats: [
+          { 
+            label: 'Active Projects', 
+            value: data.stats.activeProjects.toString(), 
+            change: data.stats.activeProjectsChange,
+            icon: Folder,
+            color: 'from-blue-500 to-cyan-500'
+          },
+          { 
+            label: 'In Progress', 
+            value: data.stats.inProgress.toString(), 
+            change: data.stats.inProgressChange,
+            icon: Clock,
+            color: 'from-purple-500 to-pink-500'
+          },
+          { 
+            label: 'Completed', 
+            value: data.stats.completed.toString(), 
+            change: data.stats.completedChange,
+            icon: CheckCircle,
+            color: 'from-green-500 to-emerald-500'
+          },
+          { 
+            label: 'Team Members', 
+            value: data.stats.teamMembers.toString(), 
+            change: data.stats.teamMembersChange,
+            icon: Users,
+            color: 'from-yellow-500 to-orange-500'
+          }
+        ],
+        projects: data.projects.map(project => ({
+          ...project,
+          id: typeof project.id === 'string' ? parseInt(project.id) : project.id,
+          status: project.status as "In Progress" | "Completed" | "Review" | "Planning" | "On Hold",
+          priority: (["High", "Medium", "Low"].includes(project.priority)
+            ? project.priority
+            : "Medium") as "High" | "Medium" | "Low", // fallback biar aman
+          team: project.team.map((memberName: string, index: number) => ({
+            id: index.toString(),
+            userId: "",
+            name: memberName,
+            projectId: project.id.toString(),
+            role: "Member",
+            joinedAt: new Date().toISOString(),
+            user: {
+              _id: "",
+              username: memberName.toLowerCase().replace(/\s+/g, "_"),
+              email: "",
+              firstName: memberName,
+              lastName: "",
+              avatar: "",
+              role: "team",
+              company: "",
+              isClient: false,
+              isActive: true,
+              clientProjects: [],
+              permissions: {
+                canViewAllProjects: false,
+                canCreateProjects: false,
+                canEditProjects: false,
+                canDeleteProjects: false,
+                canViewTasks: false,
+                canManageTasks: false,
+                canViewTeamActivity: false,
+              },
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+            avatar: ""
+          }))
+        })),
+        activities: data.recentActivity || [],
+        notifications: []
+      };
+      
+      setDashboardData(completeData);
+      
+      setDashboardData(completeData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');
     } finally {
@@ -81,37 +161,8 @@ export const DashboardPage = () => {
     );
   }
 
-  // Prepare stats data
-  const statsData = [
-    { 
-      icon: Folder, 
-      label: 'Active Projects', 
-      value: dashboardData.stats.activeProjects.toString(), 
-      change: dashboardData.stats.activeProjectsChange, 
-      color: 'from-blue-500 to-cyan-500' 
-    },
-    { 
-      icon: Clock, 
-      label: 'In Progress', 
-      value: dashboardData.stats.inProgress.toString(), 
-      change: dashboardData.stats.inProgressChange, 
-      color: 'from-purple-500 to-pink-500' 
-    },
-    { 
-      icon: CheckCircle, 
-      label: 'Completed', 
-      value: dashboardData.stats.completed.toString(), 
-      change: dashboardData.stats.completedChange, 
-      color: 'from-green-500 to-emerald-500' 
-    },
-    { 
-      icon: Users, 
-      label: 'Team Members', 
-      value: dashboardData.stats.teamMembers.toString(), 
-      change: dashboardData.stats.teamMembersChange, 
-      color: 'from-yellow-500 to-orange-500' 
-    }
-  ];
+  // Use the stats data directly since it already has all required properties
+  const statsData = dashboardData.stats;
 
   const handleQuickAction = (action: string) => {
     console.log('Quick action clicked:', action);
@@ -176,7 +227,7 @@ export const DashboardPage = () => {
 
           {/* Right Sidebar */}
           <div className="space-y-6">
-            <ActivityFeed activities={dashboardData.recentActivity} />
+            <ActivityFeed activities={dashboardData.activities} />
             <QuickActions onActionClick={handleQuickAction} />
           </div>
         </div>

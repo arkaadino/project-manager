@@ -94,7 +94,7 @@ const AppRoutes = () => {
           path="/user" 
           element={
             <ProtectedRoute>
-              <UsersPage />
+              <UsersPage /> 
             </ProtectedRoute>
           } 
         />

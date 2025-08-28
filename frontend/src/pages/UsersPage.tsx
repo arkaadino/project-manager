@@ -6,11 +6,11 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header } from '@/components/dashboard/Header';
-import { UserTable } from '@/components/users/UserTable';
-import { UserFilters } from '@/components/users/UserFilters';
-import { CreateUserDialog } from '@/components/users/CreateUserDialog';
+import { UserTable } from '@/components/users-page/UserTable';
+import { UserFilters } from '@/components/users-page/UserFilters';
+import { CreateUserDialog } from '@/components/users-page/CreateUserDialog';
 
-import type { 
+import type{ 
   User, 
   UserFilters as UserFiltersType, 
   CreateUserRequest, 
@@ -74,7 +74,7 @@ export const UsersPage = () => {
   // Effects
   useEffect(() => {
     fetchUsers();
-  }, [currentPage, searchTerm, roleFilter, statusFilter]);
+  }, [currentPage, searchTerm, roleFilter, statusFilter, fetchUsers]);
 
   // Show success message temporarily
   useEffect(() => {

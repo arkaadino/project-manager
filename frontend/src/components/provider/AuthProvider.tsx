@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { User } from '../../types/auth';
 import { AuthContext } from '../../context/AuthContext';
 import type { AuthContextType } from '../../context/AuthContext';
-import { getCurrentUser, isAuthenticated } from '../../utils/auth';
+import { getCurrentUser, isAuthenticated } from '../../utils/authApi';
 
 interface AuthProviderProps {
   children: ReactNode;

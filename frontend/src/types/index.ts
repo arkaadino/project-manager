@@ -150,7 +150,7 @@ export interface TeamMember {
   role: string;
   joinedAt: string;
   user: User;
-  avatar?: string;
+  avatar: string;
 }
 
 // Message Types
@@ -213,4 +213,109 @@ export interface Notification {
   read: boolean;
   createdAt: string;
   actionUrl?: string;
+}
+
+// ===== RAW API RESPONSE (langsung dari backend) =====
+export interface RawDashboardResponse {
+  stats: {
+    activeProjects: number;
+    activeProjectsChange: number;
+    inProgress: number;
+    inProgressChange: number;
+    completed: number;
+    completedChange: number;
+    teamMembers: number;
+    teamMembersChange: number;
+  };
+  projects: RawProject[];
+  recentActivity: Activity[];
+}
+
+// ===== DATA BUAT DASHBOARD PAGE (hasil transformasi) =====
+export interface StatsData {
+  label: string;
+  value: string;
+  change: number; // <- tadinya string
+  icon: LucideIcon;
+  color: string;
+}
+
+export type ProjectStatus =
+  | "In Progress"
+  | "Completed"
+  | "Review"
+  | "Planning"
+  | "On Hold";
+
+export type ProjectPriority = "High" | "Medium" | "Low";
+
+export interface Project {
+  id: number;
+  name: string;
+  status: ProjectStatus;
+  priority: ProjectPriority;
+  team: TeamMember[];
+}
+
+export interface TeamMember {
+  id: string;
+  userId: string;
+  name: string;
+  projectId: string;
+  role: string;
+  joinedAt: string;
+  user: User;
+  avatar: string;
+}
+
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  role: 'admin' | 'team' | 'client';
+  company: string;
+  isClient: boolean;
+  isActive: boolean;
+  clientProjects: string[];
+  permissions: {
+    canViewAllProjects: boolean;
+    canCreateProjects: boolean;
+    canEditProjects: boolean;
+    canDeleteProjects: boolean;
+    canViewTasks: boolean;
+    canManageTasks: boolean;
+    canViewTeamActivity: boolean;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Activity {
+  id: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+}
+
+export interface DashboardData {
+  stats: StatsData[];
+  projects: Project[];
+  activities: ActivityItem[];
+  notifications: Notification[];
+}
+
+export interface RawProject {
+  id: number | string;
+  name: string;
+  status: string;
+  priority: string;
+  team: string[];
 }

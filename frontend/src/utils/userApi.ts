@@ -9,7 +9,7 @@ import type {
   ClientSimple 
 } from '@/types/index';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
@@ -39,7 +39,7 @@ export const getUsers = async (filters: UserFilters = {}): Promise<UserResponse>
   if (filters.role && filters.role !== 'all') queryParams.append('role', filters.role);
   if (filters.isActive !== undefined) queryParams.append('isActive', filters.isActive.toString());
 
-  const response = await fetch(`${API_BASE}/users?${queryParams}`, {
+  const response = await fetch(`${API_BASE_URL}/users?${queryParams}`, {
     headers: getAuthHeaders(),
   });
 
@@ -48,7 +48,7 @@ export const getUsers = async (filters: UserFilters = {}): Promise<UserResponse>
 
 // Get team members (for project assignment)
 export const getTeamMembers = async (): Promise<{ users: TeamMemberSimple[] }> => {
-  const response = await fetch(`${API_BASE}/users/team`, {
+  const response = await fetch(`${API_BASE_URL}/users/team`, {
     headers: getAuthHeaders(),
   });
 
@@ -57,7 +57,7 @@ export const getTeamMembers = async (): Promise<{ users: TeamMemberSimple[] }> =
 
 // Get clients (for project assignment)
 export const getClients = async (): Promise<{ users: ClientSimple[] }> => {
-  const response = await fetch(`${API_BASE}/users/clients`, {
+  const response = await fetch(`${API_BASE_URL}/users/clients`, {
     headers: getAuthHeaders(),
   });
 
@@ -66,7 +66,7 @@ export const getClients = async (): Promise<{ users: ClientSimple[] }> => {
 
 // Get single user by ID
 export const getUserById = async (id: string): Promise<{ user: User }> => {
-  const response = await fetch(`${API_BASE}/users/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/users/${id}`, {
     headers: getAuthHeaders(),
   });
 
@@ -75,7 +75,7 @@ export const getUserById = async (id: string): Promise<{ user: User }> => {
 
 // Create new user
 export const createUser = async (userData: CreateUserRequest): Promise<{ user: User; message: string }> => {
-  const response = await fetch(`${API_BASE}/users`, {
+  const response = await fetch(`${API_BASE_URL}/users`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(userData),
@@ -86,7 +86,7 @@ export const createUser = async (userData: CreateUserRequest): Promise<{ user: U
 
 // Update user
 export const updateUser = async (id: string, userData: UpdateUserRequest): Promise<{ user: User; message: string }> => {
-  const response = await fetch(`${API_BASE}/users/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/users/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
     body: JSON.stringify(userData),
@@ -97,7 +97,7 @@ export const updateUser = async (id: string, userData: UpdateUserRequest): Promi
 
 // Delete user
 export const deleteUser = async (id: string): Promise<{ message: string }> => {
-  const response = await fetch(`${API_BASE}/users/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/users/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   });
@@ -107,7 +107,7 @@ export const deleteUser = async (id: string): Promise<{ message: string }> => {
 
 // Toggle user active status
 export const toggleUserStatus = async (id: string): Promise<{ user: User; message: string }> => {
-  const response = await fetch(`${API_BASE}/users/${id}/toggle-status`, {
+  const response = await fetch(`${API_BASE_URL}/users/${id}/toggle-status`, {
     method: 'PATCH',
     headers: getAuthHeaders(),
   });
