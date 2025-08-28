@@ -7,7 +7,7 @@ interface StatsCardProps {
   icon: LucideIcon;
   label: string;
   value: string;
-  change: string;
+  change: number;
   color: string;
   className?: string;
 }

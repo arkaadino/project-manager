@@ -74,7 +74,7 @@ export const UsersPage = () => {
   // Effects
   useEffect(() => {
     fetchUsers();
-  }, [currentPage, searchTerm, roleFilter, statusFilter, fetchUsers]);
+  }, [currentPage, searchTerm, roleFilter, statusFilter]);
 
   // Show success message temporarily
   useEffect(() => {

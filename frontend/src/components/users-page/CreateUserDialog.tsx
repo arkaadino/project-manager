@@ -23,13 +23,34 @@ import {
 } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-import type{ CreateUserRequest } from '@/types/user';
-import { validateUserData, formatApiError } from '@/utils/userApi';
+import type { CreateUserRequest } from '@/types';
+// You'll need to create these utility functions
+// import { validateUserData, formatApiError } from '@/utils/userApi';
 
 interface CreateUserDialogProps {
   onCreateUser: (userData: CreateUserRequest) => Promise<void>;
   trigger?: ReactNode;
 }
+
+// Placeholder validation function - replace with actual implementation
+const validateUserData = (data: CreateUserRequest): string[] => {
+  const errors: string[] = [];
+  if (!data.email?.includes('@')) {
+    errors.push('Please enter a valid email address');
+  }
+  if (data.password && data.password.length < 6) {
+    errors.push('Password must be at least 6 characters long');
+  }
+  return errors;
+};
+
+// Placeholder error formatting function - replace with actual implementation
+const formatApiError = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return 'An unexpected error occurred';
+};
 
 export const CreateUserDialog = ({ 
   onCreateUser, 
@@ -51,7 +72,7 @@ export const CreateUserDialog = ({
   });
 
   const handleInputChange = (field: keyof CreateUserRequest, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (error) setError(null);
   };

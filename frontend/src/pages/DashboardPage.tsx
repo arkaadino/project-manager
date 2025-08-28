@@ -10,7 +10,6 @@ import { Header } from '@/components/dashboard/Header';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { ProjectCard } from '@/components/dashboard/ProjectCard';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
-import { QuickActions } from '@/components/dashboard/QuickActions';
 import { Card, CardContent } from '@/components/ui/card';
 
 export const DashboardPage = () => {
@@ -24,87 +23,7 @@ export const DashboardPage = () => {
       setLoading(true);
       setError(null);
       const data = await dashboardApi.getDashboard();
-      
-      // Transform the API response to match DashboardData interface
-      const completeData: DashboardData = {
-        stats: [
-          { 
-            label: 'Active Projects', 
-            value: data.stats.activeProjects.toString(), 
-            change: data.stats.activeProjectsChange,
-            icon: Folder,
-            color: 'from-blue-500 to-cyan-500'
-          },
-          { 
-            label: 'In Progress', 
-            value: data.stats.inProgress.toString(), 
-            change: data.stats.inProgressChange,
-            icon: Clock,
-            color: 'from-purple-500 to-pink-500'
-          },
-          { 
-            label: 'Completed', 
-            value: data.stats.completed.toString(), 
-            change: data.stats.completedChange,
-            icon: CheckCircle,
-            color: 'from-green-500 to-emerald-500'
-          },
-          { 
-            label: 'Team Members', 
-            value: data.stats.teamMembers.toString(), 
-            change: data.stats.teamMembersChange,
-            icon: Users,
-            color: 'from-yellow-500 to-orange-500'
-          }
-        ],
-        projects: data.projects.map(project => ({
-          ...project,
-          id: typeof project.id === 'string' ? parseInt(project.id) : project.id,
-          status: project.status as "In Progress" | "Completed" | "Review" | "Planning" | "On Hold",
-          priority: (["High", "Medium", "Low"].includes(project.priority)
-            ? project.priority
-            : "Medium") as "High" | "Medium" | "Low", // fallback biar aman
-          team: project.team.map((memberName: string, index: number) => ({
-            id: index.toString(),
-            userId: "",
-            name: memberName,
-            projectId: project.id.toString(),
-            role: "Member",
-            joinedAt: new Date().toISOString(),
-            user: {
-              _id: "",
-              username: memberName.toLowerCase().replace(/\s+/g, "_"),
-              email: "",
-              firstName: memberName,
-              lastName: "",
-              avatar: "",
-              role: "team",
-              company: "",
-              isClient: false,
-              isActive: true,
-              clientProjects: [],
-              permissions: {
-                canViewAllProjects: false,
-                canCreateProjects: false,
-                canEditProjects: false,
-                canDeleteProjects: false,
-                canViewTasks: false,
-                canManageTasks: false,
-                canViewTeamActivity: false,
-              },
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            },
-            avatar: ""
-          }))
-        })),
-        activities: data.recentActivity || [],
-        notifications: []
-      };
-      
-      setDashboardData(completeData);
-      
-      setDashboardData(completeData);
+      setDashboardData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');
     } finally {
@@ -161,9 +80,6 @@ export const DashboardPage = () => {
     );
   }
 
-  // Use the stats data directly since it already has all required properties
-  const statsData = dashboardData.stats;
-
   const handleQuickAction = (action: string) => {
     console.log('Quick action clicked:', action);
     // Handle quick actions here
@@ -181,7 +97,7 @@ export const DashboardPage = () => {
         
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          {statsData.map((stat, index) => (
+          {dashboardData.stats.map((stat, index) => (
             <StatsCard 
               key={index} 
               icon={stat.icon}
@@ -228,7 +144,6 @@ export const DashboardPage = () => {
           {/* Right Sidebar */}
           <div className="space-y-6">
             <ActivityFeed activities={dashboardData.activities} />
-            <QuickActions onActionClick={handleQuickAction} />
           </div>
         </div>
       </div>

@@ -3,8 +3,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
-const { authMiddleware } = require('../middleware/auth');
-
+const { authMiddleware, requireRole } = require('../middleware/auth');
 const router = express.Router();
 
 // Register (tambahan untuk testing)
@@ -163,6 +162,11 @@ router.post('/refresh', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Token refresh failed' });
   }
 });
+
+router.get('/admin-stats', authMiddleware, requireRole(['admin']), (req,res) => {
+  res.json({ secret: 'only admin sees this' });
+});
+
 
 // // Forgot password (placeholder)
 // router.post('/forgot-password', [

@@ -1,13 +1,10 @@
 // components/dashboard/Header.tsx - Simple version
 import { useState, useEffect } from 'react';
-import { Bell, User, LogOut } from 'lucide-react';
-import { usersApi } from '@/utils/api';
+import { getCurrentUser } from '@/utils/authApi';
 import { Button } from '@/components/ui/button';
-import type { User as UserType } from '@/types';
+import type { User as UserType } from '@/types/auth';
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -29,8 +26,8 @@ export const Header = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await usersApi.getProfile();
-        setUser(response.user);
+        const userProfile = await getCurrentUser(); // ✅ Benar
+        setUser(userProfile);
       } catch (error) {
         console.error('Failed to fetch user profile:', error);
         // Handle error - maybe redirect to login
@@ -42,11 +39,6 @@ export const Header = ({
     fetchUser();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    // Redirect to login page
-    window.location.href = '/login';
-  };
   
   const userName = user ? `${user.firstName} ${user.lastName}` : 'User';
   const userInitials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : 'U';
@@ -59,17 +51,13 @@ export const Header = ({
       </div>
       
       <div className="flex items-center gap-4">
-        {!loading && (
-          <span className="text-slate-300">Hello, {userName}</span>
-        )}
-        
-        <Button 
-          variant="ghost" 
-          size="icon"
-          className="bg-slate-800/50 border border-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-700/50"
-        >
-          <Bell size={20} />
-        </Button>
+        {/* Bungkus dua span jadi kolom */}
+        <div className="flex flex-col items-end leading-tight">
+          {!loading && (
+            <span className="text-slate-300">Hello, {userName}</span>
+          )}
+          <span className="text-slate-400 text-sm">{user?.role}</span>
+        </div>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -91,19 +79,6 @@ export const Header = ({
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
-            <DropdownMenuItem className="text-slate-300 hover:bg-slate-700">
-              <User className="mr-2 h-4 w-4" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              className="text-slate-300 hover:bg-slate-700"
-              onClick={handleLogout}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </header>

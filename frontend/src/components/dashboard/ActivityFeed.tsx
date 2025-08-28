@@ -9,6 +9,7 @@ interface ActivityFeedProps {
 }
 
 export const ActivityFeed = ({ activities, className = "" }: ActivityFeedProps) => {
+  // Base activity icon (for fallback)
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'success': return <CheckCircle size={16} className="text-green-400" />;
@@ -19,14 +20,18 @@ export const ActivityFeed = ({ activities, className = "" }: ActivityFeedProps) 
   };
 
   // Map activity types to icons for more context
-  const getActivityTypeIcon = (action: string) => {
-    if (action.toLowerCase().includes('file') || action.toLowerCase().includes('upload')) {
+  const getActivityTypeIcon = (action: string | undefined) => {
+    if (!action) return getActivityIcon('default'); // Handle undefined
+    
+    const lowerAction = action.toLowerCase();
+    
+    if (lowerAction.includes('file') || lowerAction.includes('upload')) {
       return <FileUp size={16} className="text-purple-400" />;
     }
-    if (action.toLowerCase().includes('comment') || action.toLowerCase().includes('feedback')) {
+    if (lowerAction.includes('comment') || lowerAction.includes('feedback')) {
       return <MessageSquare size={16} className="text-blue-400" />;
     }
-    if (action.toLowerCase().includes('assign') || action.toLowerCase().includes('team')) {
+    if (lowerAction.includes('assign') || lowerAction.includes('team')) {
       return <UserPlus size={16} className="text-cyan-400" />;
     }
     return getActivityIcon('default');
@@ -51,15 +56,20 @@ export const ActivityFeed = ({ activities, className = "" }: ActivityFeedProps) 
           </div>
         ) : (
           activities.map((activity, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 bg-slate-900/30 rounded-lg hover:bg-slate-900/50 transition-colors">
+            <div 
+              key={`activity-${activity.id || index}-${activity.time || index}`} 
+              className="flex items-start gap-3 p-3 bg-slate-900/30 rounded-lg hover:bg-slate-900/50 transition-colors"
+            >
               <div className="mt-1">
                 {getActivityTypeIcon(activity.action)}
               </div>
               <div className="flex-1">
-                <p className="text-white text-sm">{activity.action}</p>
-                <p className="text-slate-400 text-xs">{activity.project}</p>
+                <p className="text-white text-sm">{activity.action || 'Unknown action'}</p>
+                <p className="text-slate-400 text-xs">{activity.project || 'Unknown project'}</p>
               </div>
-              <span className="text-xs text-slate-500 whitespace-nowrap">{activity.time}</span>
+              <span className="text-xs text-slate-500 whitespace-nowrap">
+                {activity.time || 'Unknown time'}
+              </span>
             </div>
           ))
         )}

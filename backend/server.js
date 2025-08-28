@@ -12,9 +12,7 @@ const { authMiddleware } = require('./middleware/auth');
 const authRoutes = require('./routes/auth');
 const healthRoutes = require('./routes/health');
 const userRoutes = require('./routes/users');
-// const userRoutes = require('./routes/users');
-// const projectRoutes = require('./routes/projects');
-// const taskRoutes = require('./routes/tasks');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
@@ -27,6 +25,8 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 // Routes
 app.use('/', healthRoutes);              // Health check routes
 app.use('/api/auth', authRoutes);        // Authentication routes
+app.use('/api/users', userRoutes);        // Authentication routes
+app.use('/api/dashboard', dashboardRoutes);        // Authentication routes
 
 // Protected routes (uncomment when ready)
 // app.use('/api/users', authMiddleware, userRoutes);

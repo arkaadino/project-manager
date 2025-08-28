@@ -31,18 +31,37 @@ const requireRole = (roles) => {
   };
 };
 
-const requireClientAccess = async (req, res, next) => {
-  const projectId = parseInt(req.params.projectId || req.body.projectId);
-  
-  if (req.user.permissions.canViewAllProjects) {
+const requireClientAccess = (req, res, next) => {
+  const projectId = req.params.projectId || req.body.projectId;
+
+  if (req.user.role === 'admin') {
     return next();
   }
-  
-  if (req.user.isClient && !req.user.clientProjects.includes(projectId)) {
-    return res.status(403).json({ error: 'Access denied' });
+
+  if (req.user.role === 'client') {
+    if (!req.user.clientProjects.includes(projectId)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
   }
-  
+
   next();
 };
 
-module.exports = { authMiddleware, requireRole, requireClientAccess };
+const requireTeamAccess = (req, res, next) => {
+  const activityId = req.params.activityId || req.body.activityId;
+
+  if (req.user.role === 'admin') {
+    return next();
+  }
+
+  if (req.user.role === 'team') {
+    if (!req.user.teamActivities.includes(activityId)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+  }
+
+  next();
+};
+
+
+module.exports = { authMiddleware, requireRole, requireClientAccess, requireTeamAccess };

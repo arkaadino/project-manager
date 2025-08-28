@@ -19,16 +19,21 @@ interface SidebarProps {
 export const Sidebar = ({ className = "" }: SidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const [open, setOpen] = useState(false);
 
+  // Menu didefinisikan dengan role yang boleh akses
   const navItems = [
-    { icon: Home, label: 'Dashboard', path: '/' },
-    { icon: FolderOpen, label: 'Projects', path: '/projects' },
-    { icon: User, label: 'User', path: '/user' },
-    { icon: Activity, label: 'Activity', path: '/activity' },
-
+    { icon: Home, label: 'Dashboard', path: '/' }, // semua role boleh
+    { icon: FolderOpen, label: 'Projects', path: '/projects', roles: ['admin', 'client'] },
+    { icon: User, label: 'User', path: '/user', roles: ['admin'] },
+    { icon: Activity, label: 'Activity', path: '/activity', roles: ['admin', 'team'] },
   ];
+
+  // Filter menu berdasarkan role user
+  const visibleNavItems = navItems.filter(
+    (item) => !item.roles || item.roles.includes(user?.role ?? "")
+  );
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -38,6 +43,7 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
     setUser(null);
     logout();
     setOpen(false);
+    navigate('/login'); // redirect habis logout
   };
 
   const isActive = (path: string) => {
@@ -50,8 +56,10 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
         <div className="flex justify-center items-center w-full">
           <img src="/Briefly-ext.svg" alt="Logo" className="w-40 h-40" />
         </div>
+
+        {/* Navigation */}
         <nav className="space-y-2">
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             <Button
               key={item.path}
               variant="ghost"
