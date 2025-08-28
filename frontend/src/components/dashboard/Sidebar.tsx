@@ -4,7 +4,7 @@ import {
   FolderOpen,
   User,
   Activity,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
@@ -27,6 +27,7 @@ export const Sidebar = ({ className = "" }: SidebarProps) => {
     { icon: FolderOpen, label: 'Projects', path: '/projects' },
     { icon: User, label: 'User', path: '/user' },
     { icon: Activity, label: 'Activity', path: '/activity' },
+
   ];
 
   const handleNavigation = (path: string) => {

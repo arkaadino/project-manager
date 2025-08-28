@@ -8,7 +8,7 @@ export interface Project {
   status: 'In Progress' | 'Review' | 'Planning' | 'Completed' | 'On Hold';
   progress: number;
   deadline: string;
-  team: string[];
+  team: TeamMember[];
   priority: 'High' | 'Medium' | 'Low';
   description?: string;
   createdAt?: string;
@@ -38,23 +38,119 @@ export interface StatsData {
 
 // User Types
 export interface User {
-  id: string;
-  name: string;
+  _id: string;
+  username: string;
   email: string;
-  avatar?: string;
-  role: 'admin' | 'manager' | 'designer' | 'client';
-  status: 'active' | 'inactive';
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  role: 'admin' | 'team' | 'client';
+  company: string;
+  isClient: boolean;
+  isActive: boolean;
+  clientProjects: string[];
+  permissions: {
+    canViewAllProjects: boolean;
+    canCreateProjects: boolean;
+    canEditProjects: boolean;
+    canDeleteProjects: boolean;
+    canViewTasks: boolean;
+    canManageTasks: boolean;
+    canViewTeamActivity: boolean;
+  };
+  lastLogin?: Date;
   createdAt: string;
+  updatedAt: string;
 }
 
+export interface CreateUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role?: 'admin' | 'team' | 'client';
+  company?: string;
+}
+
+export interface UpdateUserRequest {
+  username?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  role?: 'admin' | 'team' | 'client';
+  isActive?: boolean;
+  password?: string;
+  company?: string;
+}
+
+export interface UserResponse {
+  users: User[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+export interface TeamMemberSimple {
+  _id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+}
+
+export interface ClientSimple {
+  _id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface UserFilters {
+  page?: number;
+  limit?: number;
+  role?: string;
+  isActive?: boolean;
+  search?: string;
+}
+
+// Helper function to get full name
+export const getFullName = (user: User | TeamMemberSimple | ClientSimple): string => {
+  return `${user.firstName} ${user.lastName}`.trim();
+};
+
+// Helper function to get display role
+export const getRoleDisplay = (role: string): string => {
+  switch (role) {
+    case 'admin': return 'Administrator';
+    case 'team': return 'Team Member';
+    case 'client': return 'Client';
+    default: return role;
+  }
+};
+
+// Helper function to get role color
+export const getRoleColor = (role: string): string => {
+  switch (role) {
+    case 'admin': return 'bg-red-500/20 text-red-400 border-red-500/30';
+    case 'team': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+    case 'client': return 'bg-green-500/20 text-green-400 border-green-500/30';
+    default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+  }
+};
 // Team Types
 export interface TeamMember {
   id: string;
   userId: string;
+  name: string;
   projectId: string;
   role: string;
   joinedAt: string;
   user: User;
+  avatar?: string;
 }
 
 // Message Types

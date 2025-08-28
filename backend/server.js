@@ -11,6 +11,7 @@ const { authMiddleware } = require('./middleware/auth');
 // Import routes
 const authRoutes = require('./routes/auth');
 const healthRoutes = require('./routes/health');
+const userRoutes = require('./routes/users');
 // const userRoutes = require('./routes/users');
 // const projectRoutes = require('./routes/projects');
 // const taskRoutes = require('./routes/tasks');

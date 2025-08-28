@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import AuthPage from "./pages/AuthPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ActivityPage from "./pages/ActivityPage";
+import UsersPage from "./pages/UsersPage";
 
 // Loading Component
 const LoadingScreen = () => (
@@ -88,6 +89,16 @@ const AppRoutes = () => {
             </ProtectedRoute>
           } 
         />
+
+        <Route 
+          path="/user" 
+          element={
+            <ProtectedRoute>
+              <UsersPage />
+            </ProtectedRoute>
+          } 
+        />
+
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
